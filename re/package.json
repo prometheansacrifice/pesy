@@ -1,42 +1,40 @@
 {
   "name": "pesy",
-  "version": "0.0.0",
-  "description": "My Project",
-  "esy": {
-    "build": "dune build",
-    "release": {
-      "releasedBinaries": [
-        "Pesy.exe"
-      ]
-    }
-  },
-  "buildDirs": {
-    "test": {
-      "require": ["pesy.lib"],
-      "main": "TestPesy",
-      "name": "TestPesy.exe"
-    },
-    "library": {
-      "name": "pesy.lib",
-      "namespace": "Pesy"
-    },
-    "executable": {
-      "require": ["pesy.lib"],
-      "main": "Pesy",
-      "name": "Pesy.exe"
-    }
-  },
+  "version": "0.1.0",
+  "description": "Reason workflow with Esy",
+  "license": "MIT",
   "scripts": {
     "test": "esy x TestPesy.exe"
   },
+  "esy": {
+    "build": "refmterr dune build -p #{self.name}",
+    "NOTE": "Optional release Section. Customizes result of `esy release`",
+    "release": {
+      "releasedBinaries": [
+        "Pesy.exe"
+      ],
+      "deleteFromBinaryRelease": [
+        "*esy_ocaml_*",
+        "*refmterr-*",
+        "ocaml-*"
+      ]
+    }
+  },
   "dependencies": {
     "@opam/dune": "*",
+    "@opam/lambda-term": "*",
+    "@opam/lwt": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": "~4.6.0",
-    "pesy": "*"
+    "ocaml": "~4.6.0"
+  },
+  "resolutions": {
+    "@esy-ocaml/esy-installer": "0.0.1",
+    "@opam/menhir": "20171013",
+    "@opam/re": "1.8.0"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*"
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
   }
 }
