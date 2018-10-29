@@ -3,40 +3,42 @@
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
-    "build": "dune build",
-    "release": {
-      "releasedBinaries": [
-        "Pesy.exe"
-      ]
-    }
+    "build": [
+      "refmterr dune build -p #{self.name}",
+      "mkdir -p #{self.install / 'share' / 'template-repo'}",
+      "cp #{self.root / 'pesy-package.template.json'} #{self.install / 'share' / 'template-repo' / 'pesy-package.template.json'}",
+      "cp #{self.root / 'pesy-App.template.re'} #{ self.install / 'share' /  'template-repo' / 'pesy-App.template.re' }",
+      "cp #{self.root / 'pesy-Test.template.re'} #{ self.install / 'share' /  'template-repo' / 'pesy-Test.template.re' }",
+      "cp #{self.root / 'pesy-Util.template.re'} #{ self.install / 'share' /  'template-repo' / 'pesy-Util.template.re' }",
+      "cp #{self.root / 'pesy-README.template.md'} #{ self.install / 'share' /  'template-repo' / 'pesy-README.template.md' }",
+      "cp #{self.root / 'pesy-gitignore.template'} #{ self.install / 'share' /  'template-repo' / 'pesy-gitignore.template' }"
+    ],
+    "buildsInSource": "_build",
+    "release": { "releasedBinaries": [ "Pesy.exe" ] }
   },
   "buildDirs": {
     "test": {
-      "require": ["pesy.lib"],
+      "require": [ "pesy.lib" ],
       "main": "TestPesy",
       "name": "TestPesy.exe"
     },
-    "library": {
-      "name": "pesy.lib",
-      "namespace": "Pesy"
-    },
+    "library": { "name": "pesy.lib", "namespace": "Pesy" },
     "executable": {
-      "require": ["pesy.lib"],
+      "require": [ "pesy.lib" ],
       "main": "Pesy",
       "name": "Pesy.exe"
     }
   },
-  "scripts": {
-    "test": "esy x TestPesy.exe"
-  },
   "dependencies": {
-    "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
-    "refmterr": "*",
+    "@opam/dune": "*",
+    "@opam/lambda-term": "1.13",
+    "@opam/lwt": "4.1.0",
+    "@opam/lwt_ppx": "1.2.1",
+    "@opam/ppx_inline_test": "v0.11.0",
     "ocaml": "~4.6.0",
-    "pesy": "*"
+    "pesy": "*",
+    "refmterr": "*"
   },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*"
-  }
+  "devDependencies": { "@esy-ocaml/merlin": "*" }
 }
