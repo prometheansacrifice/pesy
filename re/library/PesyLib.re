@@ -3,6 +3,44 @@ open Utils;
 
 let build = () => LTerm.printls(LTerm_text.of_string("TODO: Build process"));
 
+let genBuildFiles = () => {
+  let%lwt _ =
+    LTerm.printls(
+      LTerm_text.of_string(
+        renderAsciiTree(
+          "test",
+          "name:    TestReasonRimraf.exe",
+          "main:    TestReasonRimraf.exe",
+          "require: reason-rimraf.lib unix ",
+          false,
+        ),
+      ),
+    );
+  let%lwt _ =
+    LTerm.printls(
+      LTerm_text.of_string(
+        renderAsciiTree(
+          "test",
+          "name:    TestReasonRimraf.exe",
+          "main:    TestReasonRimraf.exe",
+          "require: reason-rimraf.lib unix ",
+          false,
+        ),
+      ),
+    );
+  LTerm.printls(
+    LTerm_text.of_string(
+      renderAsciiTree(
+        "test",
+        "name:    TestReasonRimraf.exe",
+        "main:    TestReasonRimraf.exe",
+        "require: reason-rimraf.lib unix ",
+        true,
+      ),
+    ),
+  );
+};
+
 let bootstrap = testMode =>
   if (!isEsyInstalled()) {
     LTerm.printls(Copy.esyNotInstalledError);

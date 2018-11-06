@@ -41,8 +41,6 @@ let upperCamelCasify = kebab => {
 let removeScope = kebab =>
   Str.global_replace(Str.regexp("[^\\/]*/"), "", kebab);
 
-let getEnv = Sys.getenv_opt;
-
 let write = (file, str) => {
   open Lwt_io;
   let%lwt fileChannel = open_file(Output, file);
@@ -97,3 +95,18 @@ let exists = Sys.file_exists;
 /* }; */
 
 let mkdirp = p => Sys.command("mkdir -p " ++ p);
+
+/* TODO: prettify */
+let renderAsciiTree = (dir, name, namespace, require, isLast) => {
+  let prefix = if (isLast) {"   "} else {"│   "};
+  "│\n"
+  ++ (
+    isLast ?
+      Printf.sprintf("└─%s\n", dir) : Printf.sprintf("├─ %s\n", dir)
+  )
+  ++ Printf.sprintf({js|
+%s%s
+%s%s
+|js}, prefix, name, prefix, namespace)
+  ++ (require == "" ? "" : prefix ++ require);
+};
