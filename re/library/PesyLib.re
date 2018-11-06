@@ -20,10 +20,10 @@ let genBuildFiles = () => {
     LTerm.printls(
       LTerm_text.of_string(
         renderAsciiTree(
-          "test",
-          "name:    TestReasonRimraf.exe",
-          "main:    TestReasonRimraf.exe",
-          "require: reason-rimraf.lib unix ",
+          "library",
+          "library name: reason-rimraf.lib",
+          "namespace:    ReasonRimraf",
+          "require:     ",
           false,
         ),
       ),
@@ -31,10 +31,10 @@ let genBuildFiles = () => {
   LTerm.printls(
     LTerm_text.of_string(
       renderAsciiTree(
-        "test",
-        "name:    TestReasonRimraf.exe",
-        "main:    TestReasonRimraf.exe",
-        "require: reason-rimraf.lib unix ",
+        "executable",
+        "name:    ReasonRimraf.exe",
+        "main:    ReasonRimraf",
+        "require: reason-rimraf.lib",
         true,
       ),
     ),

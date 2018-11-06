@@ -97,16 +97,23 @@ let exists = Sys.file_exists;
 let mkdirp = p => Sys.command("mkdir -p " ++ p);
 
 /* TODO: prettify */
-let renderAsciiTree = (dir, name, namespace, require, isLast) => {
-  let prefix = if (isLast) {"   "} else {"│   "};
-  "│\n"
-  ++ (
-    isLast ?
-      Printf.sprintf("└─%s\n", dir) : Printf.sprintf("├─ %s\n", dir)
-  )
-  ++ Printf.sprintf({js|
-%s%s
-%s%s
-|js}, prefix, name, prefix, namespace)
-  ++ (require == "" ? "" : prefix ++ require);
-};
+let renderAsciiTree = (dir, name, namespace, require, isLast) =>
+  if (isLast) {
+    Printf.sprintf({js|│
+└─ %s
+   %s
+   %s
+|js}, dir, name, namespace);
+  } else {
+    Printf.sprintf(
+      {js|│
+├─ %s
+│  %s
+│  %s
+|js},
+      dir,
+      name,
+      namespace,
+    )
+    ++ (require == "" ? "" : (isLast ? "   " : "│  ") ++ require);
+  };
