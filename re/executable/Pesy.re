@@ -1,16 +1,51 @@
-let isInsideEsyEnv = () =>
-  switch (PesyUtils.getEnv("cur__name")) {
-  | Some(_) => true
-  | None => false
+open PesyUtils;
+
+let userCommand =
+  if (Array.length(Sys.argv) > 1) {
+    Some(Sys.argv[1]);
+  } else {
+    None;
   };
 
-if (isInsideEsyEnv()) {
-  /* then run build */
-  Lwt_main.run(PesyLib.build());
-} else {
-  Lwt_main.run(
-    PesyLib.bootstrap(
-      Array.length(Sys.argv) > 1 && Sys.argv[1] == "--test-mode",
-    ),
+let projectRoot =
+  switch (Sys.getenv_opt("cur__root")) {
+  | Some(curRoot) =>
+    /**
+     * This means the user ran pesy in an esy environment.
+     * Either as
+     * 1. esy pesy
+     * 2. esy b pesy
+     * 3. esy pesy build
+     * 4. esy b pesy build
+     */
+    curRoot
+  | None =>
+    /**
+     * This mean pesy is being run naked on the shell.
+     * Either it was:
+     *    $ pesy
+     *    $ pesy build
+     */
+    /** TODO prompt user for custom path */
+    Sys.getcwd()
+  };
+
+/* use readFileOpt to read previously computed directory path */
+let mode =
+  PesyLib.Mode.EsyEnv.(
+    switch (userCommand) {
+    | Some(command) => command == "build" ? BUILD : UPDATE
+    | None => UPDATE
+    }
   );
-};
+
+Lwt_main.run(
+  switch (mode) {
+  | UPDATE =>
+    let%lwt _ = PesyLib.bootstrapIfNecessary(projectRoot);
+    let packageJSONPath = Path.(projectRoot / "package.json");
+    let buildDirs = PesyLib.extractPesyConf(packageJSONPath);
+    PesyLib.generateBuildFiles(projectRoot, buildDirs);
+  | BUILD => PesyLib.build()
+  },
+);
