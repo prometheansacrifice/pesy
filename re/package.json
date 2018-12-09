@@ -24,7 +24,18 @@
       "refmterr dune build -p #{self.name}"
     ],
     "buildsInSource": "_build",
-    "release": { "releasedBinaries": [ "Pesy.exe" ] }
+    "release": {
+      "releasedBinaries": [ "Pesy.exe" ],
+      "deleteFromBinaryRelease": [
+        "ocaml*",
+        "opam__s__lwt*",
+        "opam__s__ocaml*",
+        "opam__s__merlin*",
+        "opam__s__menhir*",
+        "opam__s__ppx*",
+        "refmterr*"
+      ]
+    }
   },
   "buildDirs": {
     "test": {
