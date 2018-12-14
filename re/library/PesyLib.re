@@ -210,6 +210,7 @@ let bootstrap = testMode =>
   };
 
 let build = () => {
+  print_endline("Running dune...\n");
   let _ = Sys.command("dune build");
   Lwt.return();
 };
